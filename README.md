@@ -60,19 +60,14 @@ A estrutura planejada do projeto é:
 	-  main.py
 	-  gui.py
 	-  classes.py
-	-  gerenciador.py
-	-  armazenamanto.py
+	-  storage.py
 	-  config.py
 -  tests/
 -  docs/ 
 -  data/
-	-  projetos.json
-	-  paineis.json
-	-  tarfas.json
-	-  usuarios.json
+	-  projects.json
 -  .github/
 	-  workflows/
--  requirements.txt
 -  README.md
 -  .gitignore
 

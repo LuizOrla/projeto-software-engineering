@@ -1,6 +1,7 @@
 # Interface GUI da aplicação
 from nicegui import ui
 from storage import coletar_projetos
+from storage import criar_tarefa
 
 # ========== Objetos ==========
 # Cabeçalho
@@ -21,7 +22,7 @@ def menu_lateral(lista_projeto):
     lista = coletar_projetos()
     with ui.left_drawer(value=True).classes("bg-slate-100 p-4") as menu_lateral:
         ui.label("Menu").classes("text-lg mb-1")
-        ui.button("Nova Tarefa", icon="add", on_click=lambda: ui.notify("Adicionar tarefa")).props("flat").classes("w-full justify-start")
+        ui.button("Nova Tarefa", icon="add", on_click=janela_nova_tarefa).props("flat").classes("w-full justify-start")
         ui.button("Salvar Projeto", icon="save", on_click=lambda: ui.notify("Salvar Projeto")).props("flat").classes("w-full justify-start")
         ui.separator()
         ui.label("Projetos Salvos").classes("text-lg mb-1")
@@ -33,7 +34,7 @@ def menu_lateral(lista_projeto):
                 ui.button(icon="open_in_new", on_click=lambda: ui.notify("Abrir Projeto")).props("flat dense")
                 ui.button(icon="delete", on_click=lambda: ui.notify("Apagar Projeto")).props("flat dense")
 
-def corpo(lista_tarefas):
+def corpo(lista_tarefas=[]):
     with ui.element("div").classes("items-center justify-center"):
         ui.label("Projeto").classes("text-lg font-semibold mb-1 text-center")
         ui.label("Descrição").classes("text-center")
@@ -67,28 +68,16 @@ def card_tarefa(id, nome, descricao, status):
             if status in ["doing", "todo"]:
                 ui.button(icon="arrow_forward", on_click=lambda: ui.notify(f"Avançar {nome}")).props("flat dense")
 
+def janela_nova_tarefa():
+    with ui.dialog() as dialogo, ui.card().classes("w-2/5"):
+        ui.label("Nova Tarefa")
+        nome_tarefa = ui.input(label="Nome da Tarefa").classes("w-full")
+        desc_tarefa = ui.input(label="Descrição").classes("w-full")
+        with ui.row().classes("w-full justify-end"):
+            ui.button("Cancelar", on_click=dialogo.close).props("flat")
+            ui.button("Criar Tarefa", on_click=lambda: tarefa_nova(nome_tarefa.value, desc_tarefa.value))
+    dialogo.open()
 
-
-
-# Janela Flutuante Salvar Projeto
-# Janela Flutuante Criar Tarefa
-# Janela Flutuante Projetos Salvos
-
-lista = [["ID 1", "Nome da Tarefa 1", "Descrição da Tarefa 1", "todo"],
-         ["ID 2", "Nome da Tarefa 2", "Descrição da Tarefa 2", "todo"],
-         ["ID 3", "Nome da Tarefa 3", "Descrição da Tarefa 3", "doing"],
-         ["ID 4", "Nome da Tarefa 4", "Descrição da Tarefa 4", "done"],
-         ["ID 5", "Nome da Tarefa 5", "Descrição da Tarefa 5", "done"]]
-
-lista_proj = [
-    ["ID 1", "Título 1", "Descrição do Projeto 1"],
-    ["ID 2", "Título 2", "Descrição do Projeto 2"],
-    ["ID 3", "Título 3", "Descrição do Projeto 3"],
-    ["ID 4", "Título 4", "Descrição do Projeto 4"],
-    ["ID 5", "Título 5", "Descrição do Projeto 5"]
-]
-
-cabecalho("Projeto Teste")
-menu_lateral(lista_proj)
-corpo(lista)
-ui.run()
+def tarefa_nova(nome, desc):
+    lista = criar_tarefa(nome, desc)
+    card_tarefa(lista[0],lista[1], lista[2], lista[3])

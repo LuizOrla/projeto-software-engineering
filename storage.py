@@ -1,11 +1,11 @@
 # Arquivo de armazenamento de projetos, com suas respectivas tarefas
 from config import ARQUIVO_STORAGE
-#from gui import card_tarefa_todo, card_tarefa_doing, card_tarefa_done
 import json
 import uuid
 
 # Dicionário Projeto (global)
-global dict_projeto
+dict_projeto = {}
+dict_tarefas_temp = {}
 
 # ========== Fuções ==========
 # Exibir Projetos
@@ -20,6 +20,7 @@ def coletar_projetos():
 
 # Carregar Projeto
 def coletar_tarefas(id_projeto):
+    global dict_projeto
     projeto = dict_projeto[id_projeto]
     lista_tarefas = []
     for id_tarefa, tarefa in projeto["tarefas"]:
@@ -29,11 +30,13 @@ def coletar_tarefas(id_projeto):
 
 # Salvar Projeto
 def atualizar_projetos():
+    global dict_projeto
     with open(ARQUIVO_STORAGE, "w", encoding="utf-8") as arquivo:
         json.dumps(dict_projeto, arquivo, indent=4, ensude_ascii=False)
 
 # Criar Projeto
 def criar_projeto(titulo, descricao):
+    global dict_projeto
     id_projeto = str(uuid.uuid4())
     dict_projeto[id_projeto] = {
         "titulo": titulo,
@@ -48,6 +51,18 @@ def apagar_projeto(id):
     atualizar_projetos()
 
 # Criar Tarefa
+def criar_tarefa(nome, descricao):
+    global dict_tarefas_temp
+    id_tarefa = str(uuid.uuid4())
+    dict_tarefas_temp[id_tarefa] = {
+        "nome": nome,
+        "descricao_tarefa": descricao,
+        "status": "todo"
+    }
+    lista_tarefa = [id_tarefa, nome, descricao, "todo"]
+    return lista_tarefa
+    
+
 
 # Mover Tarefa
 

@@ -1,5 +1,6 @@
 # Interface GUI da aplicação
 from nicegui import ui
+import config
 
 def cabecalho(titulo):
     with ui.header().classes("bg-blue items-center justify-center text-white py-6"):
@@ -20,12 +21,12 @@ def menu_lateral(dict_projetos):
                 ui.button(icon="open_in_new", on_click=lambda: ui.notify("Abrir Projeto")).props("flat dense")
                 ui.button(icon="delete", on_click=lambda: ui.notify("Apagar Projeto")).props("flat dense")
 @ui.refreshable
-def corpo(dict_projeto, id_projeto=""):
-    if id_projeto == "" or id_projeto not in dict_projeto:
+def corpo(id_projeto):
+    if id_projeto == "" or id_projeto not in config.dict_projetos:
         label_projeto = "Projeto"
         label_descricao = "Descrição"
     else:
-        projeto = dict_projeto[id_projeto]
+        projeto = config.dict_projetos[id_projeto]
         label_projeto = projeto["titulo"]
         label_descricao = projeto["descricao"]
 
@@ -35,17 +36,17 @@ def corpo(dict_projeto, id_projeto=""):
     with ui.row().classes("w-full justify-center "):
         with ui.card().classes("bg-gray-100 p-4 rounded-lg shadow-none border border-gray-200 w-2/8 h-[700px] overflow-y-auto items-start"):
             ui.label("A Fazer").classes("text-lg font-semibold")
-            for id_tarefa, tarefa in dict_projeto[id_projeto]:
+            for id_tarefa, tarefa in config.dict_projetos[id_projeto]:
                 if tarefa["satus"] == "todo":
                     card_tarefa(id_tarefa, tarefa["nome"], tarefa["descricao"], tarefa["status"])
         with ui.card().classes("bg-gray-100 p-4 rounded-lg shadow-none border border-gray-200 w-2/8 h-[700px] overflow-y-auto items-start"):
             ui.label("Em Andamento").classes("text-lg font-semibold")
-            for id_tarefa, tarefa in dict_projeto[id_projeto]:
+            for id_tarefa, tarefa in config.dict_projetos[id_projeto]:
                 if tarefa["satus"] == "doing":
                     card_tarefa(id_tarefa, tarefa["nome"], tarefa["descricao"], tarefa["status"])
         with ui.card().classes("bg-gray-100 p-4 rounded-lg shadow-none border border-gray-200 w-2/8 h-[700px] overflow-y-auto items-start"):
             ui.label("Concluído").classes("text-lg font-semibold")
-            for id_tarefa, tarefa in dict_projeto[id_projeto]:
+            for id_tarefa, tarefa in config.dict_projetos[id_projeto]:
                 if tarefa["satus"] == "done":
                     card_tarefa(id_tarefa, tarefa["nome"], tarefa["descricao"], tarefa["status"])
 def card_tarefa(id, nome, descricao, status):

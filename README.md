@@ -56,21 +56,20 @@ As alterações no escopo serão registradas no histórico do projeto, incluindo
 
 ## Estrutura Inicial do Projeto
 A estrutura planejada do projeto é:
--  src/
-	-  main.py
-	-  gui.py
-	-  classes.py
-	-  storage.py
-	-  config.py
+-  main.py
+-  gui.py
+-  classes.py
+-  storage.py
+-  config.py
 -  tests/
 -  docs/ 
 -  data/
-	-  projects.json
+	- projetos.json
+    - tarefas.json
 -  .github/
 	-  workflows/
 -  README.md
 -  .gitignore
-
 
 ## Modelagem do Sistema
 Antes do desenvolvimento será realizada a modelagem inicial do sistema utilizando UML.
